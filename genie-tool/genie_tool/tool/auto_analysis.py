@@ -155,8 +155,8 @@ def create_agent(
         return_full_result: bool = False,
 ) -> CodeAgent:
     model = os.getenv("ANALYSIS_MODEL", "gpt-4.1")
-    base_url = os.getenv("OPENAI_BASE_URL")
-    api_key = os.getenv("OPENAI_API_KEY")
+    base_url = os.getenv("OPENAI_BASE_URL").strip()
+    api_key = os.getenv("OPENAI_API_KEY").strip()
     _model = OpenAIServerModel(
         model_id=model,
         api_base=base_url,
