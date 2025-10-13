@@ -1,3 +1,10 @@
+'''
+Author: galeliu
+Date: 2025-10-09 17:12:10
+LastEditTime: 2025-10-10 16:27:06
+LastEditors: galeliu
+Description: .
+'''
 # -*- coding: utf-8 -*-
 # =====================
 # 
@@ -38,6 +45,13 @@ async def ask_llm(
             else:
                 message["content"] = json.loads(
                     SensitiveWordsReplace.replace(json.dumps(message["content"], ensure_ascii=False)))
+    # ✅ 参数修正，兼容 DeepSeek / OpenAI
+    if 'deepseek' in model:
+        if top_p is None or top_p <= 0 or top_p > 1:
+            top_p = 0.9 # DeepSeek 要求 (0, 1.0]
+        if temperature is None:
+            temperature = 0.7  # 保底温度
+    print(f'top_p:{top_p},temperature:{temperature}')
     response = await acompletion(
         messages=messages,
         model=model,
